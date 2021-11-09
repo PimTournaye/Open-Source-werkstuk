@@ -1,7 +1,6 @@
 import Action from "./action";
 import Intervals from '../logic/Intervals';
 import Note from '../logic/Note';
-const Sound = require('node-aplay');
 
 class Harmony extends Action{
 
@@ -90,10 +89,9 @@ class Harmony extends Action{
 		harmonyTone = choices[harmonyIndex];
 		console.log("Harmony tone => ", harmonyTone);
 
-		let note = new Sound(`/home/ubuntu/fermata/src/actions/sounds/${harmonyTone}.wav`)
-		await note.play();
-
 		Note.lastHarmony = harmonyTone;
+
+		return harmonyTone;
 	}
 
 	public toString(): string {

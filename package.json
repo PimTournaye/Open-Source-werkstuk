@@ -14,10 +14,13 @@
   "license": "ISC",
   "dependencies": {
     "@types/jest": "^27.0.2",
+    "express": "^4.17.1",
     "jest": "^27.2.4",
+    "knex": "^0.95.14",
     "ts-node": "^10.2.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "@types/node": "^14.14.22",
     "ts-loader": "^8.0.14",
     "typescript": "^4.1.3"

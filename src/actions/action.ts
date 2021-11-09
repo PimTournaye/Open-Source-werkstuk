@@ -2,7 +2,6 @@ import key from '../logic/Key';
 import note from '../logic/Note';
 import mode  from '../logic/Mode';
 import intervals from '../logic/Intervals';
-const Sound = require('node-aplay');
 
 abstract class Action {
 
@@ -23,13 +22,12 @@ abstract class Action {
     protected async play(options: Array<string>){
 		let noteName = this.noteAdjustments(options);
 		console.log("This is the note that is going to be played => ", noteName);
-		
-		let sound = new Sound(`/home/ubuntu/fermata/src/actions/sounds/${noteName}.wav`);
-		await sound.play();
 
 		note.secondToLastRecorded = note.lastRecorded;
 		note.lastRecorded = noteName;
 		note.lastAbsolute = note.lastRecorded;
+
+		return noteName;
 	}
 	
 	protected async playChord(){
@@ -37,19 +35,15 @@ abstract class Action {
 		// DETERMINE CHORD TONES
 		let chordTones: any = mode.current.chords[Math.floor(Math.random() * mode.current.chords.length)];
 		//console.log(intervals.loadout.get(chordTones[0],));
-		let note_1 =  new Sound(`/home/ubuntu/fermata/src/actions/sounds/${intervals.loadout.get(chordTones[0])}.wav`);	
-		let note_2 = new Sound(`/home/ubuntu/fermata/src/actions/sounds/${intervals.loadout.get(chordTones[1])}.wav`);
-		let note_3 = new Sound(`/home/ubuntu/fermata/src/actions/sounds/${intervals.loadout.get(chordTones[2])}.wav`);
+		//let note_1 =  intervals.loadout.get(chordTones[0]);
+		//let note_2 = intervals.loadout.get(chordTones[1]);
+		//let note_3 = intervals.loadout.get(chordTones[2]);
 
-		await note_1.play();
-		await note_2.play();
-		await note_3.play();	
+		return intervals.loadout.get(chordTones);
 
-
-		if (chordTones.length > 3 && intervals.loadout.get(chordTones[3]) != null) {
-			let note_4 = new Sound(`/home/ubuntu/fermata/src/actions/sounds/${intervals.loadout.get(chordTones[3])}.wav`);
-			await note_4.play();
-		}
+		/* if (chordTones.length > 3 && intervals.loadout.get(chordTones[3]) != null) {
+			let note_4 = intervals.loadout.get(chordTones[3])};
+		} */
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,9 +125,7 @@ abstract class Action {
 			key.justChanged = false;
 		}
 		return newNote;
-		}
-		
-		
+		}	
 }
 
 export default Action;
