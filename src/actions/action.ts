@@ -69,7 +69,6 @@ abstract class Action {
         
 		if (played = false){ //edge case 
 			this.play(optionSets[22]);
-			console.log('using generate note edge case')
 		};
     }
 
