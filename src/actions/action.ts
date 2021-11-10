@@ -11,7 +11,7 @@ abstract class Action {
 	public type: string = "";
     private static lastSoundtype: string;
 
-	abstract onPress():void;
+	abstract onPress(): any;
 	abstract toString():string;
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,9 +19,10 @@ abstract class Action {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/** Play a note! Takes in an array of classes, and will pick one randomly. */
-    protected async play(options: Array<string>){
+    protected play(options: string[]): string{
 		let noteName = this.noteAdjustments(options);
 		console.log("This is the note that is going to be played => ", noteName);
+		
 
 		note.secondToLastRecorded = note.lastRecorded;
 		note.lastRecorded = noteName;
@@ -29,22 +30,26 @@ abstract class Action {
 
 		return noteName;
 	}
-	
-	protected async playChord(){
+	/** Play a three or four notes! Takes in an array of classes, and will pick one combination randomly. */
+	protected playChord(): (string | undefined)[]{
 
 		// DETERMINE CHORD TONES
-		let chordTones: any = mode.current.chords[Math.floor(Math.random() * mode.current.chords.length)];
-		//console.log(intervals.loadout.get(chordTones[0],));
-		//let note_1 =  intervals.loadout.get(chordTones[0]);
-		//let note_2 = intervals.loadout.get(chordTones[1]);
-		//let note_3 = intervals.loadout.get(chordTones[2]);
+		let chord = mode.current.chords[Math.floor(Math.random() * mode.current.chords.length)];
 
-		return intervals.loadout.get(chordTones);
+		let note_1 =  intervals.loadout.get(chord[0]);
+		let note_2 = intervals.loadout.get(chord[1]);
+		let note_3 = intervals.loadout.get(chord[2]);
 
-		/* if (chordTones.length > 3 && intervals.loadout.get(chordTones[3]) != null) {
-			let note_4 = intervals.loadout.get(chordTones[3])};
-		} */
-	}
+		let chordNotenames = [note_1, note_2, note_3];
+
+		if (chord.length > 3 && intervals.loadout.get(chord[3]) != null) {
+			let note_4 = intervals.loadout.get(chord[3])
+			chordNotenames.push(note_4);
+		};
+
+		return chordNotenames;
+		}
+	
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MODE FUNCTIONS //////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +57,7 @@ abstract class Action {
 
 
 	/** Uses the option sets of the current mode to choose which note to generate. */
-    protected generateNote(): void{
+    protected generateNote(){
 
         let played: boolean = false;
 		
@@ -60,19 +65,22 @@ abstract class Action {
 		let optionSets = mode.current.logic;
 		//console.log(intervals.loadout)
 
-		intervals.DATABASE.forEach((databaseElement,index) =>{
-			if(note.lastRecorded == intervals.loadout.get(databaseElement)){
-				this.play(optionSets[index])
-				//console.log("generated notes=",optionSets[index]);
+		intervals.DATABASE.forEach((databaseElement,index) =>{			
+			if(note.lastRecorded == intervals.loadout.get(databaseElement)){				
+				let note = this.play(optionSets[index])
+				played = true;
+				return note;
 			}
-		})
+		});
         
 		if (played = false){ //edge case 
-			this.play(optionSets[22]);
+			console.log('whoops, edge case');
+			let note = this.play(optionSets[22]);
+			return note;
 		};
     }
 
-	//Edge cases and preventing chromatism hell
+	// Edge cases and preventing chromatism hell
     protected noteAdjustments(options: Array<string>):string {
 			let newNote: any = "";
 			let random: number = 0;
@@ -123,8 +131,10 @@ abstract class Action {
 			}
 			key.justChanged = false;
 		}
-		return newNote;
-		}	
+		
+	return newNote;
+	
+	}	
 }
 
 export default Action;

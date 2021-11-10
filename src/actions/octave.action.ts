@@ -3,12 +3,17 @@ import note from "../logic/Note";
 
 class Octave extends Action{
 
-    onPress(): void {
-        this.generateNote();
-        this.playOctave();
+    onPress() {
+        let smallNote = this.generateNote();
+        let octaveNote = this.playOctave();
+        const NOTES = [smallNote, octaveNote]
+        smallNote = this.generateNote();
+        octaveNote = this.playOctave();
+
+        return NOTES;
     }
 
-    public async playOctave(){
+    public playOctave(){
 
         let octaveTone:string = "";
         let octaveDownorUp: Array<number> = [-12, 12]

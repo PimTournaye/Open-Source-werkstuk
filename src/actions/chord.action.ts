@@ -3,9 +3,13 @@ import mode from "../logic/Mode";
 
 class Chord extends Action {
 
-    onPress(): void {
+    onPress() {
+        let notes = [];
+
         mode.change();
-        this.playChord();
+        notes = [...this.playChord()];
+
+        return notes;
     }
 
     public toString(): string {

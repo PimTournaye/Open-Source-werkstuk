@@ -4,17 +4,26 @@ import Note from '../logic/Note';
 
 class Harmony extends Action{
 
-	onPress(): void {
-		this.generateNote();
-        this.playHarmonyTone()
+	/**
+	 * 
+	 * @returns Two notenames as strings, one as a regular note and note that is that note's harmonic
+	 */
+	onPress() {
+
+		let notes = [];
+
+		notes.push(this.generateNote());
+        notes.push(this.playHarmonyTone());
+
+		return notes;
 	}
     
-    public async playHarmonyTone() {
+    public playHarmonyTone() {
 
-		let harmonyTone: any;
+		let harmonyTone: string;
 		let choices: Array<any> = [];
 		let harmonyIndex: number;
-		var i/* :Map<string, string> */ = Intervals.loadout;
+		let i = Intervals.loadout;
 
 		switch (Note.lastAbsolute) {
 			case i.get("one1"):
@@ -99,5 +108,5 @@ class Harmony extends Action{
     }
 }
 
-const harmony = new Harmony
+const harmony = new Harmony;
 export default harmony;
