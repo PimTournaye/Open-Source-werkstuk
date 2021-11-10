@@ -3,7 +3,7 @@ import Action from "./action";
 class Small extends Action {
 
   onPress() {
-    let note = this.generateNote();
+    const note = this.generateNote();
     return note;
   }
 

@@ -12,7 +12,7 @@ class Transpose extends Action {
     onPress() {
         
         // Array to get every note that is being generated
-        let notes = []; 
+        const notes = []; 
 
         // Changing up the sound
         mode.change();
@@ -23,10 +23,10 @@ class Transpose extends Action {
         notes.push(harmony.playHarmonyTone());
 
         // Merging two arrays
-        let chordTones;
-        chordTones = this.playChord();
+        
+        const chordTones = this.playChord();
 
-        let tranposeNotes = [...notes, ...chordTones]
+        const tranposeNotes = [...notes, ...chordTones]
 
         
         return tranposeNotes;

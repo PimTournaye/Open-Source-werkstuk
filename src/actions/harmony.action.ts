@@ -10,7 +10,7 @@ class Harmony extends Action{
 	 */
 	onPress() {
 
-		let notes = [];
+		const notes = [];
 
 		notes.push(this.generateNote());
         notes.push(this.playHarmonyTone());
@@ -20,10 +20,9 @@ class Harmony extends Action{
     
     public playHarmonyTone() {
 
-		let harmonyTone: string;
-		let choices: Array<any> = [];
-		let harmonyIndex: number;
-		let i = Intervals.loadout;
+		let choices: any[] = [];
+		const harmonyIndex = Math.floor(Math.random() * choices.length);
+		const i = Intervals.loadout;
 
 		switch (Note.lastAbsolute) {
 			case i.get("one1"):
@@ -94,8 +93,7 @@ class Harmony extends Action{
 				break;
 		}
 
-		harmonyIndex = Math.floor(Math.random() * choices.length);
-		harmonyTone = choices[harmonyIndex];
+		const harmonyTone = choices[harmonyIndex];
 		console.log("Harmony tone => ", harmonyTone);
 
 		Note.lastHarmony = harmonyTone;
