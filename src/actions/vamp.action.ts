@@ -2,8 +2,11 @@ import Action from "./action";
 
 class Vamp extends Action {
 
-    onPress(): void {
-        this.playChord();
+    onPress() {
+        let notes = [];
+        notes = [...this.playChord()];
+
+        return notes;
     }
 
     public toString(): string {

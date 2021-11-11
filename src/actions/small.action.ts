@@ -2,8 +2,9 @@ import Action from "./action";
 
 class Small extends Action {
 
-  onPress(): void {
-    this.generateNote();
+  onPress() {
+    const note = this.generateNote();
+    return note;
   }
 
   public toString(): string {
