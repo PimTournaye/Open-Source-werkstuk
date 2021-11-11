@@ -11,12 +11,12 @@ class Mode {
 	public DORIAN = DORIAN;
 	public LYDIAN = LYDIAN;
 	public MIXOLYDIAN = MIXOLYDIAN;
-  	public AEOLIAN = AEOLIAN;
+	public AEOLIAN = AEOLIAN;
 
 	/** Array of all the modes. */
 	public  DATABASE: Array<ModeDef> = [this.IONIAN, this.DORIAN, this.LYDIAN, this.MIXOLYDIAN, this.AEOLIAN];
 	/** Number used with mode array to select and identify the current mode. */
-	public  index: number = 0;
+	public  index = 0;
 	/** The current mode, and the string equivalent of modeIndex. */
 	public  current: ModeDef;
 	/** The previous mode. */
