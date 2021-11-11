@@ -10,7 +10,8 @@
     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
     "lib": [
       "es5",
-      "es6"
+      "es6",
+      "DOM"
     ],
     /* Specify library files to be included in the compilation. */
     "allowJs": true,

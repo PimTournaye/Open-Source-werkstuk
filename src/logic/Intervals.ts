@@ -15,17 +15,11 @@ class Intervals {
 		// If the Intervals.loadout object is not already populated with the current key,
         if (this.updated == false) {
 
-
             let modeOffset: number;
-            //console.log(`Current key: ${key.current}`)
-            //console.log(`Current mode: ${mode.DATABASE[mode.index].name}`)
-                //Dit werkt niet meer
             if (key.current == "C Minor") {
                 modeOffset = mode.DATABASE[mode.index].minorPos;
-                //console.log("Minor position")
             } else {
                 modeOffset = mode.DATABASE[mode.index].majorPos;
-                //console.log("Major position")
             }
 
             this.loadout = new Map();
@@ -41,7 +35,6 @@ class Intervals {
             // }
 
             this.updated = true;
-            //console.log(this.loadout);
         }
         else return this.loadout;
     }
