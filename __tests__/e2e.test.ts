@@ -10,13 +10,13 @@ const DATABASE = 'testing';
 // Importing for the algorithm
 import mode from '../src/logic/Mode';
 import note from '../src/logic/Note';
-import chord from '../src/actions/chord.action';
+/* import chord from '../src/actions/chord.action';
 import vamp from '../src/actions/vamp.action';
 import small from '../src/actions/small.action';
 import transpose from '../src/actions/transpose.action';
 import octave from '../src/actions/octave.action';
 import harmony from '../src/actions/harmony.action';
-
+ */
 // Music algorithm init
 note.lastRecorded = "C3"
 mode.init();
