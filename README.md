@@ -4,16 +4,18 @@ Template is a school project regarding working with open-source
 
 ## Installation
 
-Don't use anything just yet.
+This is built using Node.js and NPM, make sure to install all neccesary modules.
 
 ```bash
-npmn dont use this yet
+npm i
 ```
 
 ## Usage
 
+You can run the entire app using Docker, both a PostgreSQL database and the Express server serving up melodies and harmonies.
+
 ```javascript
-console.log("don't use anything yet")
+docker-compose up
 ```
 
 ## Contributing
