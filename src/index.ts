@@ -17,6 +17,43 @@ import harmony from './actions/harmony.action';
 note.lastRecorded = "C3"
 mode.init();
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pg = require('knex')({
+  client: 'pg',
+  searchPath: ['knex', 'public'],
+  connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://user:pass@localhost:5432/db'
+});
+
+
+// Users route with KNEX.JS
+
+app.get('/users', async (req, res) => {
+  const dbTest = await pg.select().table('stats');
+  res.json(dbTest)
+})
+
+app.post('/users', async (req, res) => {
+  
+  const dbTest = await pg('users').insert([{username: 'test'}], {session_stat: 2})
+  res.status(200).json(dbTest)
+})
+
+app.delete('/users', async (req, res) => {
+  const dbTest = await pg('stats').where('id', 1).del();
+  res.json(dbTest)
+})
+
+app.put('/users', async (req, res) => {
+  const dbTest = await pg('stats').where({id: 1}).update('initial', 'C3')
+  res.json(dbTest)
+})
+
+
+
+// UPDATE route
+app.put('/update', (req, res) => {
+  console.log(req.body)
+})
 
 // GET endpoints, giving back various combinations of sounds.
 app.get('/note', (req, res) => {
@@ -49,21 +86,6 @@ app.get('/transpose', (req, res) => {
   res.status(200).json(notes)
 })
 
-// POST route 
-app.post('/create', (req, res) => {
-  res.status(200).send('post submitted')
-})
-
-// UPDATE route
-app.put('/update', (req, res) => {
-  console.log(req.body)
-})
-
-// DELETE route
-app.delete('/delete', (req, res) => {
-  res.status(200).send('deleted the following')
-
-})
 
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`)
