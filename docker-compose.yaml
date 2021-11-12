@@ -14,6 +14,7 @@ services:
     volumes:
       - .:/app/
       - /app/node_modules
+      - ./src:/usr/app/src
 
   postgres:
     image: postgres
