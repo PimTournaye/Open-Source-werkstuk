@@ -26,10 +26,10 @@ jobs:
         run: docker-compose up -d
 
       - name: Install NPM packages
-        working-directory: ./app
+        working-directory: .
         run: npm ci
 
       - name: Run tests
-        working-directory: ./app
+        working-directory: .
         run: npm run test-ci
  
