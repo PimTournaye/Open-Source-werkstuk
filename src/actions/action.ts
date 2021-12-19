@@ -20,14 +20,16 @@ abstract class Action {
 
 	/** Play a note! Takes in an array of classes, and will pick one randomly. */
     protected play(options: string[]): string{
+		
 		const noteName = this.noteAdjustments(options);
-		console.log("This is the note that is going to be played => ", noteName);
+		//console.log("This is the note that is going to be played => ", noteName);
 		
 
 		note.secondToLastRecorded = note.lastRecorded;
 		note.lastRecorded = noteName;
 		note.lastAbsolute = note.lastRecorded;
 
+		
 		return noteName;
 	}
 	/** Play a three or four notes! Takes in an array of classes, and will pick one combination randomly. */
@@ -57,18 +59,20 @@ abstract class Action {
 
 
 	/** Uses the option sets of the current mode to choose which note to generate. */
-    protected generateNote(){
+    protected async generateNote(){
 
         let played = false;
 		
 		
 		const optionSets = mode.current.logic;
-		//console.log(intervals.loadout)
+		
+		intervals.DATABASE.forEach(async (databaseElement,index) =>{	
+					
+			if(note.lastRecorded == intervals.loadout.get(databaseElement)){		
+						
+				const note = await this.play(optionSets[index])
+				played = true;				
 
-		intervals.DATABASE.forEach((databaseElement,index) =>{			
-			if(note.lastRecorded == intervals.loadout.get(databaseElement)){				
-				const note = this.play(optionSets[index])
-				played = true;
 				return note;
 			}
 		});
