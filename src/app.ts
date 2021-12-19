@@ -117,7 +117,4 @@ app.get('/transpose', (req, res) => {
   res.status(200).json(notes)
 })
 
-
-app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`)
-})
+export default app;
