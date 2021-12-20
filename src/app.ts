@@ -24,38 +24,47 @@ const pg = require('knex')({
   connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://user:pass@localhost:5432/db'
 });
 
+/////////////////////////////////////////////
+// Database routes with KNEX.JS /////////////
+/////////////////////////////////////////////
 
-// Users route with KNEX.JS
-
-app.get('/users', async (req, res) => {
+/**
+ * GET Route - gets music stats from the current session
+ */
+app.get('/stats', async (req, res) => {
   const dbTest = await pg.select().table('stats');
   res.json(dbTest)
-})
+});
 
-app.post('/users', async (req, res) => {
-  
-  const dbTest = await pg('users').insert([{username: 'test'}], {session_stat: 2})
-  res.status(200).json(dbTest)
-})
-
-app.delete('/users', async (req, res) => {
-  const dbTest = await pg('stats').where('id', 1).del();
-  res.json(dbTest)
-})
-
-app.put('/users', async (req, res) => {
+/**
+ * PUT Route - updates the stats from the current session
+ */
+app.put('/stats', async (req, res) => {
   const dbTest = await pg('stats').where({id: 1}).update('initial', 'C3')
   res.json(dbTest)
-})
+});
+
+/**
+ * POST Route - Creates a new row when a session starts
+ */
+app.post('/sessions', async (req, res) => {
+  
+  const dbTest = await pg('sessions').insert([{username: 'test'}], {session_stat: 2})
+  res.status(200).json(dbTest)
+});
+
+/** 
+ * DELETE Route - Deletes the given row in the sessions table, along with it's stats
+ */
+app.delete('/sessions', async (req, res) => {
+  const dbTest = await pg('sessions').where('id', 1).del();
+  res.json(dbTest)
+});
 
 
-
-// UPDATE route
-app.put('/update', (req, res) => {
-  console.log(req.body)
-})
-
-// GET endpoints, giving back various combinations of sounds.
+////////////////////////////////////////////////////////////////////////
+// GET endpoints, giving back various combinations of sounds. //////////
+////////////////////////////////////////////////////////////////////////
 
 /**
  * GET Route - Note
