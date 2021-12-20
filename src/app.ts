@@ -62,8 +62,8 @@ app.put('/update', (req, res) => {
  * Generates a note in the current key and mode.
  * @returns a single note in the form of a string, ie. "C3"
  */
-app.get('/note', (req, res) => {
-  const note = small.onPress()
+app.get('/note', async (req, res) => {
+  const note = await small.onPress()
   res.send(note)
 })
 
@@ -72,8 +72,8 @@ app.get('/note', (req, res) => {
  * Generates a 3-note or 4-note chord in  the current key, while also changing the music's mode.
  * @returns an array of 3 or 4 strings
  */
-app.get('/chord', (req, res) => {
-  const notes = chord.onPress()
+app.get('/chord',  (req, res) => {
+  const notes =  chord.onPress()
   res.send(notes)
 })
 
@@ -82,7 +82,7 @@ app.get('/chord', (req, res) => {
  * Generates a 3-note or 4-note chord in the current key and mode.
  * @returns an array of 3 or 4 strings
  */
-app.get('/vamp', (req, res) => {
+app.get('/vamp', async (req, res) => {
   const notes = vamp.onPress()
   res.send(notes)
 })
@@ -92,7 +92,7 @@ app.get('/vamp', (req, res) => {
  * Generates a note and an additional one an octave higher or lower
  * @returns an array of two strings
  */
-app.get('/octave', (req, res) => {
+app.get('/octave', async (req, res) => {
   const notes = octave.onPress()
   res.send(notes)
 })
