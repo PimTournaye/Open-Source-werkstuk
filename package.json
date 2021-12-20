@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=./build node build/src/index.js",
+    "start": "NODE_PATH=./build node build/src/server.js",
     "build": "tsc -p .",
     "test": "jest --watchAll",
     "test-ci": "jest",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/server.ts"
   },
   "keywords": [],
   "author": "",

@@ -11,6 +11,8 @@ RUN npm i -g ts-node
 
 COPY . .
 
+VOLUME [ "- ./src:/usr/app/src" ]
+
 EXPOSE 3000
 
 CMD npm start
