@@ -56,11 +56,25 @@ app.use(express.json());
  * @returns status code 200
  */
 app.put('/sessions', async (req, res) => {
-  const userData = req.body.user_id;
-  if (!userData) return res.sendStatus(400);
+  const user_id = req.body.user_id;
+  if (!user_id) return res.sendStatus(400);
+  if (typeof user_id != 'number') throw new Error("Given user ID is not a number");
   
+  const data = {
+    last_harmony: note.lastHarmony,
+    last_octave: note.lastOctave,
+    initial: "C3",
+    current_key: key.current[0],
+    current_mode: mode.current.name,
+    user_id: user_id
+}
 
-  res.sendStatus(200);
+console.log(data);
+
+await pg("sessions").where({user_id: user_id}).update(data)
+
+res.sendStatus(200);
+
 });
 
 
@@ -91,9 +105,6 @@ app.post('/users', async (req, res) => {
 }
   await pg.insert(sessionRow).into('sessions');
 
-
-  //update(add[0])
-
   return res.json(add[0])
 
 });
@@ -105,9 +116,13 @@ app.post('/users', async (req, res) => {
  * @param id of user
  */
 app.delete('/sessions', async (req, res) => {
-  const userData = req.body.id;
-  const data = await pg('session').join('users', 'user_id', '=', userData).del()
-  res.json(data)
+  const id = req.body.id;
+  if (!id) return res.sendStatus(400);
+  if (typeof id != 'number') throw new Error("Given user ID is not a number");
+
+  await pg('sessions').where({user_id: id}).del();
+  await pg('users').where({id: id}).del();
+  res.sendStatus(200)
 });
 
 
