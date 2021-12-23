@@ -1,7 +1,6 @@
 // Express setup
 import express from "express";
 const app = express()
-const PORT = 3000
 
 // Importing for the algorithm
 import mode from './logic/Mode';
@@ -44,13 +43,16 @@ app.put('/stats', async (req, res) => {
   res.json(dbTest)
 });
 
+// Session table endpoints
+
 /**
  * POST Route - Creates a new row when a session starts
  */
 app.post('/sessions', async (req, res) => {
-  
-  const dbTest = await pg('sessions').insert([{username: 'test'}], {session_stat: 2})
-  res.status(200).json(dbTest)
+  const createSession = await pg('sessions').insert();
+  //const getId = await pg('sessions')
+  res.status(200).json(createSession)
+
 });
 
 /** 
