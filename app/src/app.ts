@@ -41,6 +41,8 @@ app.use(express.json());
  */
  app.get('/sessions', async (req, res) => {
   const userData = req.body.user_id;
+
+  // Checking id there is any data sent in the request and what kind of data it is
   if (!userData) return res.sendStatus(400);
   if (typeof userData != 'number') throw new Error("ID is not a number");
   
@@ -58,6 +60,9 @@ app.use(express.json());
  */
 app.put('/sessions', async (req, res) => {
   const user_id = req.body.user_id;
+
+
+  // Checking id there is any data sent in the request and what kind of data it is
   if (!user_id) return res.sendStatus(400);
   if (typeof user_id != 'number') throw new Error("Given user ID is not a number");
   
@@ -89,9 +94,12 @@ app.post('/users', async (req, res) => {
     email: req.body.email
   }
 
+  // Checking id there is any data sent in the request, what kind of data and finally email validation
   if (!userData) return res.sendStatus(400);
   if (typeof userData.user_name != 'string' || typeof userData.email != 'string') throw new Error("New user info can only be strings");
-  
+  if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(userData.email)) {
+    throw new Error("Not a valid email!");
+  }
   const add = await pg.insert(userData).into('users').returning('id');
   
   const sessionRow = {
@@ -116,6 +124,7 @@ app.post('/users', async (req, res) => {
  */
 app.delete('/sessions', async (req, res) => {
   const id = req.body.id;
+  // Checking id there is any data sent in the request and what kind of data it is  
   if (!id) return res.sendStatus(400);
   if (typeof id != 'number') throw new Error("Given user ID is not a number");
 
