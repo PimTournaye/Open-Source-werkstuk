@@ -26,6 +26,10 @@ createTable(pg);
 app.use(express.json());
 
 
+
+
+
+
 /////////////////////////////////////////////
 // Database routes with KNEX.JS /////////////
 /////////////////////////////////////////////
@@ -36,44 +40,69 @@ app.use(express.json());
  * @returns Your session stats and user info
  */
  app.get('/session', async (req, res) => {
-  const data = await pg('session').join('users', 'user_id', '=', 'id')
+  const userData = req.body.user_id;
+  if (!userData) return res.sendStatus(400);
+  if (typeof userData != 'number') throw new Error("ID is not a number");
+  
+  const data = await pg('session').join('users', 'user_id', '=', userData)
   res.json(data)
 });
 
+
+
 /**
  * PUT Route - updates the stats from the current session
+ * @param user_id
+ * @returns status code 200
  */
 app.put('/sessions', async (req, res) => {
-  const dbTest = await pg('sessions').where({id: 1}).update('initial', 'C3')
-  res.json(dbTest)
+  const userData = req.body.user_id;
+  if (!userData) return res.sendStatus(400);
+  
+  update(userData);
+  res.sendStatus(200);
 });
 
-// Session table endpoints
+
 
 /**
- * POST Route - Creates a new row when a session starts
+ * POST Route - Creates a new row when a session starts`
+ * @param user_name and email
+ * @returns the new user's id
  */
-app.post('/sessions', async (req, res) => {
-  const data = req.body;
-  console.log(data);
-  if(!data) return res.sendStatus(400);
+app.post('/users', async (req, res) => {
+  const userData = {
+    user_name: req.body.user_name,
+    email: req.body.email
+  }
 
-  const add = await pg('sessions').insert(data);
-  console.log(add);
+  if (!userData) return res.sendStatus(400);
+  if (typeof userData.user_name != 'string' || typeof userData.email != 'string') throw new Error("New user info can only be strings");
+  
+  const add = await pg.insert(userData).into('users').returning('id');
+  console.log(add[0]);
+  
+  update(add[0])
 
-  //const createSession = await pg('sessions').insert();
-  //const getId = await pg('sessions')
-  res.sendStatus(200)//.json(createSession)
+  return res.json(add[0])
 
 });
+
+
 
 /** 
  * DELETE Route - Deletes the given row in the sessions table, along with it's stats
+ * @param id of user
  */
 app.delete('/sessions', async (req, res) => {
-  const dbTest = await pg('sessions').where('id', 1).del();
-  res.json(dbTest)
+  const userData = req.body.id;
+  const data = await pg('session').join('users', 'user_id', '=', userData).del()
+  res.json(data)
 });
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -90,7 +119,6 @@ app.get('/note', async (req, res) => {
   const note = await small.onPress()
   
   res.send(note)
-  //update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -100,9 +128,12 @@ app.get('/note', async (req, res) => {
  */
 app.get('/chord',  (req, res) => {
   const notes =  chord.onPress()
-  res.send(notes)
-
-  //update(req.body.id, req.body.user_id)
+  if (req.body.user_id == undefined) {
+    res.send(notes)
+  } else {
+    res.send(notes)
+    //update(req.body.user_id)
+  }
 })
 
 /**
@@ -114,8 +145,8 @@ app.get('/vamp', async (req, res) => {
   const notes = vamp.onPress()
   res.send(notes)
 
-  //update(req.body.id, req.body.user_id)
-})
+  //update(req.body.user_id)
+});
 
 /**
  * GET Route - Octave
@@ -126,8 +157,7 @@ app.get('/octave', async (req, res) => {
   const notes = octave.onPress()
   res.send(notes)
 
-  //update(req.body.id, req.body.user_id)
-})
+});
 
 /**
  * GET Route - Octave
@@ -138,7 +168,7 @@ app.get('/harmony', (req, res) => {
   const notes = harmony.onPress()
   res.send(notes)
 
-  //update(req.body.id, req.body.user_id)
+  //update(req.body.user_id)
 })
 
 /**
@@ -153,18 +183,24 @@ app.get('/transpose', (req, res) => {
   //update(req.body.id, req.body.user_id)
 })
 
-async function update(id: number, user_id: number):Promise<void> {
+/**
+ * Template function to PUT / UPDATE the sessions
+ * @param user_id 
+ */
+async function update(user_id: number):Promise<void> {
   const data = {
-      id: id,
       last_harmony: note.lastHarmony,
       last_octave: note.lastOctave,
       initial: "C3",
-      current_key: key.current,
-      current_mode: mode.current,
+      current_key: key.current[0],
+      current_mode: mode.current.name,
       user_id: user_id
   }
 
-  await pg("sessions").where({id: id}).update(data)
+  console.log(data);
+  
+
+  await pg("sessions").where({user_id: user_id}).update(data)
   
 }
 
