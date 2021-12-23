@@ -33,11 +33,11 @@ app.use(express.json());
 /**
  * GET Route - gets music stats from the current session
  * @param user_id
- * @returns Your session stats
+ * @returns Your session stats and user info
  */
- app.get('/stats', async (req, res) => {
-  const dbTest = await pg.select().table('stats');
-  res.json(dbTest)
+ app.get('/session', async (req, res) => {
+  const data = await pg('session').join('users', 'user_id', '=', 'id')
+  res.json(data)
 });
 
 /**
@@ -90,7 +90,7 @@ app.get('/note', async (req, res) => {
   const note = await small.onPress()
   
   res.send(note)
-  update(req.body.id, req.body.user_id)
+  //update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -102,7 +102,7 @@ app.get('/chord',  (req, res) => {
   const notes =  chord.onPress()
   res.send(notes)
 
-  update(req.body.id, req.body.user_id)
+  //update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -114,7 +114,7 @@ app.get('/vamp', async (req, res) => {
   const notes = vamp.onPress()
   res.send(notes)
 
-  update(req.body.id, req.body.user_id)
+  //update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -126,7 +126,7 @@ app.get('/octave', async (req, res) => {
   const notes = octave.onPress()
   res.send(notes)
 
-  update(req.body.id, req.body.user_id)
+  //update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -138,7 +138,7 @@ app.get('/harmony', (req, res) => {
   const notes = harmony.onPress()
   res.send(notes)
 
-  update(req.body.id, req.body.user_id)
+  //update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -150,7 +150,7 @@ app.get('/transpose', (req, res) => {
   const notes = transpose.onPress()
   res.status(200).json(notes)
 
-  update(req.body.id, req.body.user_id)
+  //update(req.body.id, req.body.user_id)
 })
 
 async function update(id: number, user_id: number):Promise<void> {

@@ -106,12 +106,6 @@ dist
 # Builds folder
 build
 
-# package-lock.json
-package-lock.json
-
-# tsconfig
-tsconfig.json
-
 # Other
 TODO
 
