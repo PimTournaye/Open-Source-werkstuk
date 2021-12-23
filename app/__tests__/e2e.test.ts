@@ -31,12 +31,3 @@ const pg = require('knex')({
 // Create new table
 // try to delete a row
 // insert a new row
-
-describe('Postgres testing', () => {
-  
-  it('should create a new table', async () => {
-    await pg.raw(`DROP DATABASE IF EXISTS ${DATABASE}`)
-    await pg.raw(`CREATE DATABASE ${DATABASE}`)
-
-  })
-})
