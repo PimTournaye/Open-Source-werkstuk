@@ -37,14 +37,15 @@ app.use(express.json());
 /**
  * GET Route - gets music stats from the current session
  * @param user_id
- * @returns Your session stats and user info
+ * @returns Your session stats
  */
- app.get('/session', async (req, res) => {
+ app.get('/sessions', async (req, res) => {
   const userData = req.body.user_id;
   if (!userData) return res.sendStatus(400);
   if (typeof userData != 'number') throw new Error("ID is not a number");
   
-  const data = await pg('session').join('users', 'user_id', '=', userData)
+  //const data = await pg('sessions').join('users', 'user_id', '=', userData)
+  const data = await pg('sessions').select('*').where({user_id: userData})
   res.json(data)
 });
 
@@ -69,8 +70,6 @@ app.put('/sessions', async (req, res) => {
     user_id: user_id
 }
 
-console.log(data);
-
 await pg("sessions").where({user_id: user_id}).update(data)
 
 res.sendStatus(200);
@@ -80,7 +79,7 @@ res.sendStatus(200);
 
 
 /**
- * POST Route - Creates a new row when a session starts`
+ * POST Route - Creates a new row with a username and email and insert standard data into a different table for setup
  * @param user_name and email
  * @returns the new user's id
  */
