@@ -5,23 +5,25 @@ const app = express()
 // Importing for the algorithm
 import mode from './logic/Mode';
 import note from './logic/Note';
+import key from "./logic/Key";
 import chord from './actions/chord.action';
 import vamp from './actions/vamp.action';
 import small from './actions/small.action';
 import transpose from './actions/transpose.action';
 import octave from './actions/octave.action';
 import harmony from './actions/harmony.action';
-
-// Music algorithm init
-note.lastRecorded = "C3"
-mode.init();
+import { createTable } from "./table-creation";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const pg = require('knex')({
+export const pg = require('knex')({
   client: 'pg',
   searchPath: ['knex', 'public'],
-  connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://user:pass@localhost:5432/db'
+  connection: process.env.DATABASE_URL ? process.env.DATABASE_URL : 'postgres://user:pass@localhost:5432/db'
 });
+
+createTable(pg);
+
+app.use(express.json());
 
 /////////////////////////////////////////////
 // Database routes with KNEX.JS /////////////
@@ -49,9 +51,16 @@ app.put('/stats', async (req, res) => {
  * POST Route - Creates a new row when a session starts
  */
 app.post('/sessions', async (req, res) => {
-  const createSession = await pg('sessions').insert();
+  const data = req.body;
+  console.log(data);
+  if(!data) return res.sendStatus(400);
+
+  const add = await pg('sessions').insert(data);
+  console.log(add);
+
+  //const createSession = await pg('sessions').insert();
   //const getId = await pg('sessions')
-  res.status(200).json(createSession)
+  res.sendStatus(200)//.json(createSession)
 
 });
 
@@ -74,7 +83,9 @@ app.delete('/sessions', async (req, res) => {
  * @returns a single note in the form of a string, ie. "C3"
  */
 app.get('/note', async (req, res) => {
+  console.log('start');
   const note = await small.onPress()
+  
   res.send(note)
 })
 
