@@ -59,7 +59,7 @@ app.put('/sessions', async (req, res) => {
   const userData = req.body.user_id;
   if (!userData) return res.sendStatus(400);
   
-  update(userData);
+
   res.sendStatus(200);
 });
 
@@ -80,9 +80,19 @@ app.post('/users', async (req, res) => {
   if (typeof userData.user_name != 'string' || typeof userData.email != 'string') throw new Error("New user info can only be strings");
   
   const add = await pg.insert(userData).into('users').returning('id');
-  console.log(add[0]);
   
-  update(add[0])
+  const sessionRow = {
+    last_harmony: note.lastHarmony,
+    last_octave: note.lastOctave,
+    initial: "C3",
+    current_key: key.current[0],
+    current_mode: mode.current.name,
+    user_id: add[0]
+}
+  await pg.insert(sessionRow).into('sessions');
+
+
+  //update(add[0])
 
   return res.json(add[0])
 
@@ -182,26 +192,5 @@ app.get('/transpose', (req, res) => {
 
   //update(req.body.id, req.body.user_id)
 })
-
-/**
- * Template function to PUT / UPDATE the sessions
- * @param user_id 
- */
-async function update(user_id: number):Promise<void> {
-  const data = {
-      last_harmony: note.lastHarmony,
-      last_octave: note.lastOctave,
-      initial: "C3",
-      current_key: key.current[0],
-      current_mode: mode.current.name,
-      user_id: user_id
-  }
-
-  console.log(data);
-  
-
-  await pg("sessions").where({user_id: user_id}).update(data)
-  
-}
 
 export default app;
