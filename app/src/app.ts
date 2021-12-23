@@ -25,14 +25,17 @@ createTable(pg);
 
 app.use(express.json());
 
+
 /////////////////////////////////////////////
 // Database routes with KNEX.JS /////////////
 /////////////////////////////////////////////
 
 /**
  * GET Route - gets music stats from the current session
+ * @param user_id
+ * @returns Your session stats
  */
-app.get('/stats', async (req, res) => {
+ app.get('/stats', async (req, res) => {
   const dbTest = await pg.select().table('stats');
   res.json(dbTest)
 });
@@ -40,8 +43,8 @@ app.get('/stats', async (req, res) => {
 /**
  * PUT Route - updates the stats from the current session
  */
-app.put('/stats', async (req, res) => {
-  const dbTest = await pg('stats').where({id: 1}).update('initial', 'C3')
+app.put('/sessions', async (req, res) => {
+  const dbTest = await pg('sessions').where({id: 1}).update('initial', 'C3')
   res.json(dbTest)
 });
 
@@ -87,6 +90,7 @@ app.get('/note', async (req, res) => {
   const note = await small.onPress()
   
   res.send(note)
+  update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -97,6 +101,8 @@ app.get('/note', async (req, res) => {
 app.get('/chord',  (req, res) => {
   const notes =  chord.onPress()
   res.send(notes)
+
+  update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -107,6 +113,8 @@ app.get('/chord',  (req, res) => {
 app.get('/vamp', async (req, res) => {
   const notes = vamp.onPress()
   res.send(notes)
+
+  update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -117,6 +125,8 @@ app.get('/vamp', async (req, res) => {
 app.get('/octave', async (req, res) => {
   const notes = octave.onPress()
   res.send(notes)
+
+  update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -127,6 +137,8 @@ app.get('/octave', async (req, res) => {
 app.get('/harmony', (req, res) => {
   const notes = harmony.onPress()
   res.send(notes)
+
+  update(req.body.id, req.body.user_id)
 })
 
 /**
@@ -137,6 +149,23 @@ app.get('/harmony', (req, res) => {
 app.get('/transpose', (req, res) => {
   const notes = transpose.onPress()
   res.status(200).json(notes)
+
+  update(req.body.id, req.body.user_id)
 })
+
+async function update(id: number, user_id: number):Promise<void> {
+  const data = {
+      id: id,
+      last_harmony: note.lastHarmony,
+      last_octave: note.lastOctave,
+      initial: "C3",
+      current_key: key.current,
+      current_mode: mode.current,
+      user_id: user_id
+  }
+
+  await pg("sessions").where({id: id}).update(data)
+  
+}
 
 export default app;
