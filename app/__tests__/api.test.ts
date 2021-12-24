@@ -246,7 +246,7 @@ describe('Testing while logged in', () => {
       .send({
         user_id: user_id
       })
-      .expect(400)
+      .expect(200)
   });
 
 });
