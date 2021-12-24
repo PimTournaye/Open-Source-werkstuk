@@ -165,7 +165,6 @@ app.get('/chord',  (req, res) => {
     res.send(notes)
   } else {
     res.send(notes)
-    //update(req.body.user_id)
   }
 })
 
@@ -178,7 +177,6 @@ app.get('/vamp', async (req, res) => {
   const notes = vamp.onPress()
   res.send(notes)
 
-  //update(req.body.user_id)
 });
 
 /**
@@ -201,7 +199,6 @@ app.get('/harmony', (req, res) => {
   const notes = harmony.onPress()
   res.send(notes)
 
-  //update(req.body.user_id)
 })
 
 /**
@@ -213,7 +210,6 @@ app.get('/transpose', (req, res) => {
   const notes = transpose.onPress()
   res.status(200).json(notes)
 
-  //update(req.body.id, req.body.user_id)
 })
 
 export default app;
