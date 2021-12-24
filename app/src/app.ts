@@ -44,11 +44,11 @@ app.use(express.json());
 
   // Checking id there is any data sent in the request and what kind of data it is
   if (!userData) return res.sendStatus(400);
-  if (typeof userData != 'number') throw new Error("ID is not a number");
+  if (typeof userData != 'number') return res.sendStatus(400)
   
   //const data = await pg('sessions').join('users', 'user_id', '=', userData)
   const data = await pg('sessions').select('*').where({user_id: userData})
-  res.json(data)
+  return res.json(data)
 });
 
 
@@ -64,7 +64,7 @@ app.put('/sessions', async (req, res) => {
 
   // Checking id there is any data sent in the request and what kind of data it is
   if (!user_id) return res.sendStatus(400);
-  if (typeof user_id != 'number') throw new Error("Given user ID is not a number");
+  if (typeof user_id != 'number') return res.sendStatus(400)
   
   const data = {
     last_harmony: note.lastHarmony,
@@ -77,7 +77,7 @@ app.put('/sessions', async (req, res) => {
 
 await pg("sessions").where({user_id: user_id}).update(data)
 
-res.sendStatus(200);
+return res.sendStatus(200);
 
 });
 
@@ -88,7 +88,7 @@ res.sendStatus(200);
  * @param user_name and email
  * @returns the new user's id
  */
-app.post('/users', async (req, res) => {
+app.post('/users', async (req, res, next) => {
   const userData = {
     user_name: req.body.user_name,
     email: req.body.email
@@ -96,9 +96,9 @@ app.post('/users', async (req, res) => {
 
   // Checking id there is any data sent in the request, what kind of data and finally email validation
   if (!userData) return res.sendStatus(400);
-  if (typeof userData.user_name != 'string' || typeof userData.email != 'string') throw new Error("New user info can only be strings");
-  if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(userData.email)) {
-    throw new Error("Not a valid email!");
+  else if (typeof userData.user_name != 'string' || typeof userData.email != 'string') return res.sendStatus(400)
+  if (!/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(userData.email)) {
+    return res.sendStatus(400)
   }
   const add = await pg.insert(userData).into('users').returning('id');
   
@@ -126,11 +126,11 @@ app.delete('/sessions', async (req, res) => {
   const id = req.body.id;
   // Checking id there is any data sent in the request and what kind of data it is  
   if (!id) return res.sendStatus(400);
-  if (typeof id != 'number') throw new Error("Given user ID is not a number");
+  if (typeof id != 'number') return res.sendStatus(400)
 
   await pg('sessions').where({user_id: id}).del();
   await pg('users').where({id: id}).del();
-  res.sendStatus(200)
+  return res.sendStatus(200)
 });
 
 
