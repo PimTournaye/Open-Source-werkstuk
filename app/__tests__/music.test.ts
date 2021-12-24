@@ -12,8 +12,8 @@ import intervals from '../src/logic/Intervals';
 // Music algorithm init
 note.lastRecorded = "C3"
 mode.init();
-/*
-// This one actually can totally fail
+
+// This one has been posted on the issues page on the repo
 test('check if mode has changed', () =>{
     const currentMode = mode.current;
     mode.change();
@@ -21,7 +21,7 @@ test('check if mode has changed', () =>{
     expect(currentMode).not.toBe(mode.current);
 })
 
-// This one too but there's an issue open for that
+// This one too and there's also an issue open for that
 test('check for variation in notes', () =>{
     const lastPlayed = small.onPress();
     expect(lastPlayed).toBe(note.lastAbsolute);
@@ -32,7 +32,7 @@ test('check for variation in notes', () =>{
     expect(lastPlayed).toBe(note.secondToLastRecorded);
 });
 
-// This can also not be different but hey, most of the time it should pass
+// If the mode issue gets fixed, this also is able to get fixed
 test('check for different intervals loadout', () => {
     mode.change()
     const firstLoadout = intervals.loadout;
@@ -44,4 +44,4 @@ test('check for different intervals loadout', () => {
 
     expect(firstLoadout).not.toBe(newLoadout);
 
-})*/
+})
