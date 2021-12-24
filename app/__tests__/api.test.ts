@@ -239,12 +239,21 @@ describe('Testing while logged in', () => {
       .expect(400)
   });
 
-  it('should delete current stats', async () => {
+  it('should delete current stats - wrong key', async () => {
 
     await supertest(SERVER)
       .delete("/sessions")
       .send({
         user_id: user_id
+      })
+      .expect(400)
+  });
+  it('should delete current stats - wrong key', async () => {
+
+    await supertest(SERVER)
+      .delete("/sessions")
+      .send({
+        id: user_id
       })
       .expect(200)
   });
