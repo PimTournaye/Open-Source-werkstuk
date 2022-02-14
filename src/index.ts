@@ -1,7 +1,29 @@
 // Express setup
 import express from "express";
+import cors from 'cors'
 const app = express()
 const PORT = 3000
+
+app.use(cors());
+// app.use(function (req, res, next) {
+
+//   // Website you wish to allow to connect
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
+
+//   // Request methods you wish to allow
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+//   // Request headers you wish to allow
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+//   // Set to true if you need the website to include cookies in the requests sent
+//   // to the API (e.g. in case you use sessions)
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+//   // Pass to next layer of middleware
+//   next();
+// });
+//app.options('*', cors());
 
 // Importing for the algorithm
 import mode from './logic/Mode';
@@ -62,9 +84,10 @@ app.put('/update', (req, res) => {
  * Generates a note in the current key and mode.
  * @returns a single note in the form of a string, ie. "C3"
  */
-app.get('/note', (req, res) => {
-  const note = small.onPress()
-  res.send(note)
+app.get('/note', async (req, res) => {
+  const note = await small.onPress()
+  
+  res.json(note)
 })
 
 /**
@@ -92,8 +115,8 @@ app.get('/vamp', (req, res) => {
  * Generates a note and an additional one an octave higher or lower
  * @returns an array of two strings
  */
-app.get('/octave', (req, res) => {
-  const notes = octave.onPress()
+app.get('/octave', async (req, res) => {
+  const notes = await octave.onPress()
   res.send(notes)
 })
 
@@ -102,8 +125,8 @@ app.get('/octave', (req, res) => {
  * Generates a note and an additional one that is the first one's harmonic.
  * @returns an array of two strings
  */
-app.get('/harmony', (req, res) => {
-  const notes = harmony.onPress()
+app.get('/harmony', async (req, res) => {
+  const notes = await harmony.onPress()
   res.send(notes)
 })
 
@@ -112,8 +135,8 @@ app.get('/harmony', (req, res) => {
  * Changes the whole feel of the generated music. Changes the current key and mode and then generates a chord, an octave tone and an harmony tone. Big sound boom. Yay!
  * @returns an array of 5-6 strings.
  */
-app.get('/transpose', (req, res) => {
-  const notes = transpose.onPress()
+app.get('/transpose', async (req, res) => {
+  const notes = await transpose.onPress()
   res.status(200).json(notes)
 })
 
