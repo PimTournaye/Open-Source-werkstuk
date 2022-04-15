@@ -2,8 +2,11 @@ import Action from "./action";
 
 class Small extends Action {
 
-  onPress() {
-    const note = this.generateNote();
+  async onPress() {
+    console.log('generating small note');
+    const note = await this.generateNote();
+    console.log('end of fucntion', note);
+    
     return note;
   }
 

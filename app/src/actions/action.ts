@@ -62,26 +62,34 @@ abstract class Action {
     protected async generateNote(){
 
         let played = false;
-		
+
+		let generatedNote: string;
 		
 		const optionSets = mode.current.logic;
 		
-		intervals.DATABASE.forEach(async (databaseElement,index) =>{	
+		intervals.DATABASE.forEach( (databaseElement,index) =>{	
 					
 			if(note.lastRecorded == intervals.loadout.get(databaseElement)){		
-						
-				const note = await this.play(optionSets[index])
-				played = true;				
+				
+				const foundNote = this.play(optionSets[index])
+				played = true;	
+				console.log('returning note', foundNote, played);
+					
+				generatedNote = foundNote;
 
-				return note;
+				return generatedNote;
+				
+			}
+			if (!played && index == intervals.DATABASE.length){ //failsafe 
+				console.log('whoops, edge case');
+				const foundNote = this.play(optionSets[22]);
+
+				generatedNote = foundNote;
+				return generatedNote;
 			}
 		});
-        
-		if (!played){ //edge case 
-			console.log('whoops, edge case');
-			const note = this.play(optionSets[22]);
-			return note;
-		}
+
+		
     }
 
 	// Edge cases and preventing chromatism hell
