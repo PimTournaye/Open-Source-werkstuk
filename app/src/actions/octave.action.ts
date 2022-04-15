@@ -3,20 +3,21 @@ import note from "../logic/Note";
 
 class Octave extends Action{
 
-    onPress() {
-        let smallNote = this.generateNote();
-        let octaveNote = this.playOctave();
+    async onPress() {
+
+        const smallNote = await this.generateNote();
+        const octaveNote = this.playOctave();
         const NOTES = [smallNote, octaveNote]
-        smallNote = this.generateNote();
-        octaveNote = this.playOctave();
+        // smallNote = await this.generateNote();
+        // octaveNote = this.playOctave();
 
         return NOTES;
     }
 
     public playOctave(){
 
-        let octaveTone:string = "";
-        let octaveDownorUp: Array<number> = [-12, 12]
+        let octaveTone = "";
+        const octaveDownorUp: Array<number> = [-12, 12]
 
         for (let i = 0; i < note.DATABASE.length; i++) {
             if (note.lastAbsolute == note.DATABASE[i]) {

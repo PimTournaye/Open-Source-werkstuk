@@ -9,7 +9,7 @@ class Transpose extends Action {
      * This changes the mode and key that are currently being used, as well as playing a note, a harmonic note and a chord at the same time.
      * @returns An array of strings containing note names
      */
-    onPress() {
+    async onPress() {
         
         // Array to get every note that is being generated
         const notes = []; 
@@ -19,7 +19,7 @@ class Transpose extends Action {
         Key.change();
 
         // Single notes
-        notes.push(this.generateNote());
+        notes.push(await this.generateNote());
         notes.push(harmony.playHarmonyTone());
 
         // Merging two arrays
